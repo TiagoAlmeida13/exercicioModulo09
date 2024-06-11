@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import withFormHandling from '../WithFormHandling/withFormHandling';
-import Form2 from '../Form2/form2';
+
 
 const Form1 = ({ formData, handleInputChange, handleSubmit, errors, onSubmit }) => {
     const [loginSuccess, setLoginSuccess] = useState(false);
