@@ -1,44 +1,47 @@
 import React, { useState } from 'react';
 import withFormHandling from '../WithFormHandling/withFormHandling';
 
-
-const Form1 = ({ formData, handleInputChange, handleSubmit, errors, onSubmit }) => {
+const Form1 = ({ formData, handleInputChange, handleSubmit, errors }) => {
     const [loginSuccess, setLoginSuccess] = useState(false);
+    const [formErrors, setFormErrors] = useState({});
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        const formErrors = validateForm();
-        if (Object.keys(formErrors).length === 0) {
+        const errors = validateForm();
+        if (Object.keys(errors).length === 0) {
             setLoginSuccess(true);
+            handleSubmit();
+        } else {
+            setFormErrors(errors);
         }
     };
 
     const validateForm = () => {
-        let formErrors = {};
+        let errors = {};
 
         if (!formData.email) {
-            formErrors.email = 'Endereço de e-mail é obrigatório';
+            errors.email = 'Endereço de e-mail é obrigatório';
         } else {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(formData.email)) {
-                formErrors.email = 'Endereço de e-mail inválido';
+                errors.email = 'Endereço de e-mail inválido';
             }
         }
 
         if (!formData.password) {
-            formErrors.password = 'Senha é obrigatória';
+            errors.password = 'Senha é obrigatória';
         }
 
-        return formErrors;
+        return errors;
     };
 
     return (
         <div>
             <form onSubmit={handleFormSubmit}>
                 <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="Endereço de e-mail" />
-                {errors.email && <span>{errors.email}</span>}
+                {formErrors.email && <span>{formErrors.email}</span>}
                 <input type="password" name="password" value={formData.password} onChange={handleInputChange} placeholder="Senha" />
-                {errors.password && <span>{errors.password}</span>}
+                {formErrors.password && <span>{formErrors.password}</span>}
                 <button type="submit">Entrar</button>
             </form>
             {loginSuccess && <h3>Login efetuado com sucesso!</h3>}
